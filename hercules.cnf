@@ -39,9 +39,9 @@
   SHCMDOPT  disable  nodiag8            # No shell commands from Herc cmdline
   DIAG8CMD  disable  noecho             # OS may not issue commands via DIAG 8
 
-# HTTP      PORT  8081 noauth                 # HTTP server port
-# HTTP      ROOT  /usr/local/share/hercules/  # HTTP root directory
-# HTTP      START                             # HTTP Start Server
+  HTTP      PORT  8081 noauth                 # HTTP server port
+  HTTP      ROOT  /usr/local/share/hercules/  # HTTP root directory
+  HTTP      START                             # HTTP Start Server
 
   PANOPT    MSGCOLOR=DARK RATE=FAST     # Panel options
 
@@ -70,6 +70,7 @@
   000D    3525    punch00d.txt ascii
   000E    1403    print00e.txt crlf
   001F    3270
+
 #         The following statements are examples. Some of them require
 #         user tailoring before being used.
 # 0580    3420    ickdsf.ipl

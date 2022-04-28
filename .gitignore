@@ -162,3 +162,5 @@ allTests.*
 # Dynamically generated files
 /AutoBuildCount.h
 /_nmake_pjj.bat
+
+hercules.srf.gz
