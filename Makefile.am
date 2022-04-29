@@ -252,7 +252,15 @@ bin_PROGRAMS = \
   $(HERCIFC)   \
   $(HERCLIN)
 
-EXTRA_PROGRAMS = hercifc hercutun
+if BUILD_HERCUTUN
+bin_PROGRAMS += hercutun
+endif
+
+if BUILD_HERCIFC
+bin_PROGRAMS += hercifc
+endif
+
+#EXTRA_PROGRAMS = hercifc hercutun
 
 #----------------------------------------------------------------------------
 # For each module:
@@ -942,7 +950,7 @@ noinst_HEADERS =          \
   hdl.h                   \
   herc_getopt.h           \
   hercifc.h               \
-  hercutun.h
+  hercutun.h              \
   hercules.h              \
   hercwind.h              \
   herror.h                \

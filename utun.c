@@ -40,13 +40,12 @@ UTUN_Initialize(int *pUnit,
 
     if (snprintf(pszUnit, sizeof(pszUnit), "%d", *pUnit) >
         (long)sizeof(pszUnit)-1) {
-        logmsg(_("HHCXU001E Too many digits in utun unit number %d\n"),
-               *pUnit);
+        WRMSG( HHCXU001E, "E", *pUnit);
         return(-1);
     }        
 
     if (socketpair(AF_UNIX, SOCK_STREAM, 0, fd) < 0) {
-        logmsg(_("HHCXU002E socketpair() failed: %s\n"), strerror(errno));
+        WRMSG( HHCXU002E, "E", strerror(errno));
         return(-1);
     }
 
@@ -54,11 +53,10 @@ UTUN_Initialize(int *pUnit,
         hercutun = HERCUTUN_CMD;
     }
 
-    logmsg(_("HHCXU901I About to fork()/exec(): %s %s %s %s %s\n"),
-        hercutun, pszUnit, pszDriveIPAddr, pszGuestIPAddr, pszNetMask);
+    WRMSG(HHCXU901I, "I",hercutun, pszUnit, pszDriveIPAddr, pszGuestIPAddr, pszNetMask);
 
     if ((pid = fork()) < 0) {
-        logmsg(_("HHCXU003E fork() failed: %s\n"), strerror(errno));
+        WRMSG(HHCXU003E, "E", strerror(errno));
         return(-1);
     } else if (pid == 0) {
         /* in child process*/
@@ -82,7 +80,7 @@ UTUN_Initialize(int *pUnit,
 
     cmsg = malloc(CMSG_LEN(sizeof(int)));
     if (cmsg == NULL) {
-        logmsg(_("HHCXU004E malloc() failed\n"));
+        WRMSG(HHCXU004E, "E");
         goto err2;
     }
 
@@ -98,17 +96,17 @@ UTUN_Initialize(int *pUnit,
     msg.msg_flags = 0;
 
     if ((nr = recvmsg(fd[0], &msg, 0)) < 0) {
-        logmsg(_("HHCXU005E recvmsg() failed: %s\n"), strerror(errno));
+        WRMSG(HHCXU005E, "E", strerror(errno));
         goto err1;
     }
 
     if (nr == 0) {
-        logmsg(_("HHCXU006E Broken connection to hercutun process\n"));
+        WRMSG(HHCXU006E, "E");
         goto err1;
     }
 
     if (msg.msg_controllen != CMSG_LEN(sizeof(int))) {
-        logmsg(_("HHCXU007E No file descriptor from hercutun process\n"));
+        WRMSG(HHCXU007E, "E");
         goto err1;
     }
 
@@ -124,19 +122,19 @@ UTUN_Initialize(int *pUnit,
     waitpid(pid, &status, 0);
     switch (WEXITSTATUS(status)) {
     case HERCUTUN_OK:
-        logmsg(_("HHCXU020I hercutun exited normally\n"));
+        WRMSG(HHCXU020I, "I");
         break;
     case HERCUTUN_ARG_ERROR:
-        logmsg(_("HHCXU021E hercutun argument error\n"));
+        WRMSG(HHCXU021E, "E");
         break;
     case HERCUTUN_UTUN_ERROR:
-        logmsg(_("HHCXU022E hercutun error while opening interface\n"));
+        WRMSG(HHCXU022E, "E");
         break;
     case HERCUTUN_IFCONFIG_ERROR:
-        logmsg(_("HHCXU023E hercutun error while configuring addresses\n"));
+        WRMSG(HHCXU023E, "E");
         break;
     case HERCUTUN_IPC_ERROR:
-        logmsg(_("HHCXU024E hercutun IPC error\n"));
+        WRMSG(HHCXU024E, "E");
         break;
     }
     return -1;

@@ -61,7 +61,7 @@
  * Programming in the UNIX Environment, 3rd ed., pp. 642-669.
  */
 
-#include <config.h>
+#include "config.h"
 
 #if defined(BUILD_HERCUTUN)
 

@@ -271,11 +271,11 @@ int  CTCI_Init( DEVBLK* pDEVBLK, int argc, char *argv[] )
     else{
         #if defined(HAVE_NET_IF_UTUN_H)
         if (pDevCTCBLK->fUtun) {
-            snprintf(pDevCTCBLK->szTUNCharName,
-                     sizeof(pDevCTCBLK->szTUNCharName),
+            snprintf(pDevCTCBLK->szTUNCharDevName,
+                     sizeof(pDevCTCBLK->szTUNCharDevName),
                      HERCUTUN_IF_NAME_PREFIX "%d", pDevCTCBLK->iUtunUnit);
-            snprintf(pDevCTCBLK->szTUNDevName,
-                     sizeof(pDevCTCBLK->szTUNDevName),
+            snprintf(pDevCTCBLK->szTUNIfName,
+                     sizeof(pDevCTCBLK->szTUNIfName),
                      HERCUTUN_IF_NAME_PREFIX "%d", pDevCTCBLK->iUtunUnit);
             snprintf(pDevCTCBLK->pDEVBLK[0]->filename,
                      sizeof(pDevCTCBLK->pDEVBLK[0]->filename),
@@ -381,7 +381,8 @@ int  CTCI_Init( DEVBLK* pDEVBLK, int argc, char *argv[] )
     #endif /* defined(HAVE_NET_IF_UTUN_H) */
 
 
-    }
+
+
 
     // Copy the fd to make panel.c happy
     pDevCTCBLK->pDEVBLK[ CTC_READ_SUBCHANN  ]->fd =
@@ -1490,8 +1491,7 @@ static int  ParseArgs( DEVBLK* pDEVBLK, PCTCBLK pCTCBLK,
                 lUtunUnitArg = strtol(optarg, &pzEndPtr, 10);
                 if (*pzEndPtr != '\0' ||
                     lUtunUnitArg > INT_MAX || lUtunUnitArg < 0) {
-                    logmsg(_("HHCCT081E %4.4X: Invalid utun unit %s\n"),
-                           pDEVBLK->devnum, optarg);
+                    WRMSG(HHCCT081E, "E", pDEVBLK->devnum, optarg);
                     return -1;
                 }
                 pCTCBLK->iUtunUnit = (int)lUtunUnitArg;
